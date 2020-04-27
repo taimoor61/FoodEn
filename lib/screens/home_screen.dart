@@ -6,66 +6,51 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int _currentIndex = 0;
+  List<Widget> _children = [
+    Container(color: Colors.white),
+    Container(color: Colors.blue),
+    Container(color: Colors.green),
+    Container(color: Colors.red),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Hero(
-                tag: "logo",
-                child: Image(
-                  image: AssetImage('assets/my_icon.png'),
-                  height: 300.0,
-                  width: 250.0,
-                ),
-              ),
-              SizedBox(height: 24.0),
-              TextField(
-                onChanged: (value) {},
-                textAlign: TextAlign.center,
-                decoration: InputDecoration(
-                  hintText: "Enter Your Email",
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32.0)),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueAccent, width: 1.0),
-                    borderRadius: BorderRadius.circular(32.0)
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueAccent, width: 2.0),
-                    borderRadius: BorderRadius.circular(32.0)
-                  )
-                ),
-              ),
-              SizedBox(height: 24.0),
-              TextField(
-                onChanged: (value) {},
-                textAlign: TextAlign.center,
-                decoration: InputDecoration(
-                  hintText: "Password",
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(32.0)),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueAccent, width: 1.0),
-                    borderRadius: BorderRadius.circular(32.0)
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueAccent, width: 2.0),
-                    borderRadius: BorderRadius.circular(32.0)
-                  )
-                ),
-              )
-            ],
+      appBar: AppBar(
+        title: Text('FoodEN'),
+      ),
+      body: _children[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.grey,
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            backgroundColor: Colors.black,
+            icon: Icon(Icons.person),
+            title: Text('Profile'),
           ),
-        ),
+          BottomNavigationBarItem(
+            backgroundColor: Colors.black,
+            icon: new Icon(Icons.map),
+            title: new Text('Volunteer'),
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Colors.black,
+            icon: new Icon(Icons.money_off),
+            title: new Text('Donate'),
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Colors.black,
+            icon: new Icon(Icons.event),
+            title: new Text('Events'),
+          )
+        ],
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fooden/screens/home_screen.dart';
 import 'package:fooden/screens/launch_screen.dart';
 import 'package:fooden/screens/login_screen.dart';
 import 'package:fooden/screens/registration_screen.dart';
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
         'launch_screen': (context) => LaunchScreen(),
         'welcome_screen': (context) => WelcomeScreen(),
         'login_screen': (context) => LoginScreen(),
-        'registration_screen': (context) => RegistrationScreen()
+        'registration_screen': (context) => RegistrationScreen(),
+        'home_screen': (context) => HomeScreen()
       },
     );
   }
