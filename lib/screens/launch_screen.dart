@@ -6,6 +6,16 @@ class LaunchScreen extends StatefulWidget {
 }
 
 class _LaunchScreenState extends State<LaunchScreen> {
+  @override
+  void initState() {
+    super.initState();
+    changeScreen();
+  }
+
+  void changeScreen() async {
+    await Future.delayed(const Duration(seconds: 1), () {});
+    Navigator.popAndPushNamed(context, 'welcome_screen');
+  }
 
   @override
   Widget build(BuildContext context) {
