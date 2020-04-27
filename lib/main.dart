@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'screens/launch_screen.dart';
+import 'package:fooden/screens/home_screen.dart';
+import 'package:fooden/screens/launch_screen.dart';
+import 'package:fooden/screens/login_screen.dart';
+import 'package:fooden/screens/registration_screen.dart';
+import 'package:fooden/screens/welcome_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,6 +17,10 @@ class MyApp extends StatelessWidget {
       initialRoute: 'launch_screen',
       routes: {
         'launch_screen': (context) => LaunchScreen(),
+        'welcome_screen': (context) => WelcomeScreen(),
+        'login_screen': (context) => LoginScreen(),
+        'registration_screen': (context) => RegistrationScreen(),
+        'home_screen': (context) => HomeScreen()
       },
     );
   }
