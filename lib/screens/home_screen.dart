@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fooden/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -8,7 +9,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   List<Widget> _children = [
-    Container(color: Colors.white),
+    ProfileScreen(),
     Container(color: Colors.blue),
     Container(color: Colors.green),
     Container(color: Colors.red),
