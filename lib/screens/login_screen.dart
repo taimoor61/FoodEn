@@ -18,11 +18,13 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              height: 200.0,
-              child: Hero(
-                tag: "logo",
-                child: Image.asset('images/logo.png'),
+            Flexible(
+              child: Container(
+                height: 200.0,
+                child: Hero(
+                  tag: "logo",
+                  child: Image.asset('images/logo.png'),
+                ),
               ),
             ),
             SizedBox(
@@ -43,9 +45,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 //Do something with the user input.
               },
               textAlign: TextAlign.center,
-              decoration: kInputDecoration.copyWith(
-                hintText: "Enter Your Password"
-              ),
+              decoration:
+                  kInputDecoration.copyWith(hintText: "Enter Your Password"),
             ),
             SizedBox(
               height: 24.0,
@@ -53,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
             RoundedButton(
               text: "Login",
               color: Colors.lightBlueAccent,
-              onPressed: (){
+              onPressed: () {
                 Navigator.pushNamed(context, 'home_screen');
               },
             ),
