@@ -5,7 +5,11 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Profile"),
+      ),
       floatingActionButton: FloatingActionButton(
+        onPressed: null,
         child: Icon(Icons.edit),
       ),
       body: Padding(
@@ -14,28 +18,32 @@ class ProfileScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Container(
-                width: 190.0,
-                height: 190.0,
-                decoration: new BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: new DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage("images/my_image.jpg"),
+              Flexible(
+                child: Container(
+                  width: 200.0,
+                  height: 200.0,
+                  decoration: new BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: new DecorationImage(
+                      fit: BoxFit.fill,
+                      image: AssetImage("images/my_image.jpg"),
+                    ),
                   ),
                 ),
               ),
               SizedBox(
-                height: 40.0,
-                width: 150.0,
-                child: Divider(
-                  height: 5.0,
-                  color: Colors.teal.shade100,
+                height: 20.0,
+              ),
+              Text(
+                "Taimoor Aftab",
+                style: TextStyle(
+                  color: Colors.teal.shade900,
+                  fontSize: 40.0,
+                  fontFamily: "Pacifico",
                 ),
               ),
-              CustomCard(
-                text: "Taimoor Aftab",
-                icon: Icons.people,
+              SizedBox(
+                height: 20.0,
               ),
               CustomCard(
                 text: "+92 343 9851659",

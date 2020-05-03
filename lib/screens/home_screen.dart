@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fooden/screens/event_screen.dart';
 import 'package:fooden/screens/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,18 +13,14 @@ class _HomeScreenState extends State<HomeScreen> {
     ProfileScreen(),
     Container(color: Colors.blue),
     Container(color: Colors.green),
-    Container(color: Colors.red),
+    EventScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('FoodEN'),
-      ),
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.grey,
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
