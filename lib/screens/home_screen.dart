@@ -12,7 +12,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _children = [
     ProfileScreen(),
     Container(color: Colors.blue),
-    Container(color: Colors.green),
+    Container(color: Colors.green), 
     EventScreen(),
   ];
 
