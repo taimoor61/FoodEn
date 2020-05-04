@@ -144,7 +144,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   widget.callback(event);
                   Navigator.pop(context);
                 },
-              )
+              ),
+              SizedBox(height: 20.0,)
             ],
           ),
         ));

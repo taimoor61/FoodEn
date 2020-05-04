@@ -69,11 +69,18 @@ class _EventScreenState extends State<EventScreen> {
                   5.0), //only(top: 5.0, bottom: 5.0, right: 20.0, left: 5.0),
               padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
               decoration: BoxDecoration(
-                color: event.isHandled ? Color(0xFFebffe8) : Color(0xFFFFEFEE),
+                color: event.isHandled ? Colors.white : Color(0xFFFFEFEE),//Color(0xFFebffe8)
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30.0),
                   bottomRight: Radius.circular(30.0),
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey,
+                    offset: Offset(0.0, 2.0), //(x,y)
+                    blurRadius: 6.0,
+                  ),
+                ],
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
