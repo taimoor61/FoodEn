@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../components/rounded_button.dart';
 
+// ignore: must_be_immutable
 class OrgDetailScreen extends StatelessWidget{
 
   OrgDetailScreen({this.path = '', this.name = ''});
@@ -12,6 +13,7 @@ class OrgDetailScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title : Text('Information')),
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -57,6 +59,7 @@ class OrgDetailScreen extends StatelessWidget{
               color: Colors.red,
               text: 'Donate',
               onPressed: (){
+                Navigator.pushNamed(context, 'payment_screen');
               },
             )
           ],
