@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fooden/screens/home_screen.dart';
 import 'package:fooden/screens/launch_screen.dart';
 import 'package:fooden/screens/login_screen.dart';
+import 'package:fooden/screens/org_details_screen.dart';
 import 'package:fooden/screens/registration_screen.dart';
 import 'package:fooden/screens/welcome_screen.dart';
 
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
         'welcome_screen': (context) => WelcomeScreen(),
         'login_screen': (context) => LoginScreen(),
         'registration_screen': (context) => RegistrationScreen(),
-        'home_screen': (context) => HomeScreen()
+        'home_screen': (context) => HomeScreen(),
+        'org_details': (context) => OrgDetailScreen()
       },
     );
   }
