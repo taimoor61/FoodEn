@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:fooden/models/organizations.dart';
 import 'package:fooden/constants.dart';
 import 'package:fooden/screens/org_details_screen.dart';
@@ -26,6 +27,17 @@ class DonateScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+=======
+import 'package:fooden/constants.dart';
+
+import '../constants.dart';
+import '../constants.dart';
+
+class DonateScreen extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+>>>>>>> 16f8302d5784ccea603b2dc21cca57d2e23a1326
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -40,6 +52,7 @@ class DonateScreen extends StatelessWidget {
               ),
             ),
             Expanded(
+<<<<<<< HEAD
               child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: orgs.length,
@@ -64,10 +77,65 @@ class DonateScreen extends StatelessWidget {
                     );
                   }
               )
+=======
+              child: ListView(
+                shrinkWrap: true,
+                children: <Widget>[
+                  Card(
+                    child: Image.asset(
+                      'images/eidhi.jpg',
+                      fit: BoxFit.fill,
+                    ),
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    margin: EdgeInsets.all(10),
+                  ),
+                  Card(
+                    child: Image.asset(
+                        'images/al-ameen.jpg',
+                         fit: BoxFit.fill,
+                    ),
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    margin: EdgeInsets.all(10),
+                  ),
+                  Card(
+                    child: Image.asset(
+                        'images/aghakhan.png',
+                      fit: BoxFit.fill,
+                    ),
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    margin: EdgeInsets.all(10),
+                  ),
+                  Card(
+                    child: Image.asset(
+                        'images/mustafa-trust.png',
+                      fit: BoxFit.fill,
+                    ),
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    margin: EdgeInsets.all(10),
+                  ),
+                ],
+              ),
+>>>>>>> 16f8302d5784ccea603b2dc21cca57d2e23a1326
             ),
           ],
         ),
       ),
     );
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 16f8302d5784ccea603b2dc21cca57d2e23a1326
