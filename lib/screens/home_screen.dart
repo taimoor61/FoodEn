@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fooden/screens/donate_screen.dart';
 import 'package:fooden/screens/event_screen.dart';
 import 'package:fooden/screens/profile_screen.dart';
 
@@ -12,7 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _children = [
     ProfileScreen(),
     Container(color: Colors.blue),
-    Container(color: Colors.green), 
+    DonateScreen(), 
     EventScreen(),
   ];
 
