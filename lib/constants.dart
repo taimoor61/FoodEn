@@ -38,12 +38,10 @@ const kTextFieldDecoration = InputDecoration(
     borderSide: BorderSide.none,
   ),
 );
-<<<<<<< HEAD
 
 const kEventTextFieldStyle = TextStyle(
   fontSize: 30.0,
   color: Colors.lightBlueAccent,
   fontWeight: FontWeight.bold,
 );
-=======
->>>>>>> 16f8302d5784ccea603b2dc21cca57d2e23a1326
+
