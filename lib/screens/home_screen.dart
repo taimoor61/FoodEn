@@ -13,11 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _children = [
     ProfileScreen(),
     Container(color: Colors.blue),
-<<<<<<< HEAD
-    DonateScreen(), 
-=======
     DonateScreen(),
->>>>>>> 16f8302d5784ccea603b2dc21cca57d2e23a1326
     EventScreen(),
   ];
 
