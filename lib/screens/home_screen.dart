@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fooden/screens/donate_screen.dart';
 import 'package:fooden/screens/event_screen.dart';
 import 'package:fooden/screens/profile_screen.dart';
+import 'package:fooden/screens/volunteer_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -12,8 +13,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   List<Widget> _children = [
     ProfileScreen(),
-    Container(color: Colors.blue),
-    DonateScreen(), 
+    MyMap(),
+    DonateScreen(),
     EventScreen(),
   ];
 

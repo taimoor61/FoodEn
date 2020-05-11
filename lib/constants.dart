@@ -44,3 +44,4 @@ const kEventTextFieldStyle = TextStyle(
   color: Colors.lightBlueAccent,
   fontWeight: FontWeight.bold,
 );
+

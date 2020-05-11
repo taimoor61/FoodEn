@@ -9,7 +9,7 @@ class DonateScreen extends StatelessWidget {
 
   List<Organization> orgs = [
     Organization(
-      path: 'images/aghakhan-foundation.png', name: 'Agha Khan Foundation'
+        path: 'images/aghakhan-foundation.png', name: 'Agha Khan Foundation'
     ),
     Organization(
         path: 'images/al-ameen.jpg', name: 'Al-Ameen Trust'
@@ -40,30 +40,30 @@ class DonateScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: orgs.length,
-                  itemBuilder: (BuildContext context, int index){
-                    final Organization org = orgs[index];
-                    return GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(
-                            builder: (context) => OrgDetailScreen(
-                              path: orgs[index].path,
-                              name: orgs[index].name,
-                            )));
-                      },
-                      child: Card(
-                        child: Image.asset(orgs[index].path, fit: BoxFit.fill),
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: orgs.length,
+                    itemBuilder: (BuildContext context, int index){
+                      final Organization org = orgs[index];
+                      return GestureDetector(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) => OrgDetailScreen(
+                                path: orgs[index].path,
+                                name: orgs[index].name,
+                              )));
+                        },
+                        child: Card(
+                          child: Image.asset(orgs[index].path, fit: BoxFit.fill),
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          margin: EdgeInsets.all(10),
                         ),
-                        margin: EdgeInsets.all(10),
-                      ),
-                    );
-                  }
-              )
+                      );
+                    }
+                )
             ),
           ],
         ),

@@ -21,6 +21,9 @@
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
+	<key>io.flutter.embedded_views_preview</key>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>To access your current location.</string>
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
