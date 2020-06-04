@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "708010893893",
+    "firebase_url": "https://fooden-772c9.firebaseio.com",
+    "project_id": "fooden-772c9",
+    "storage_bucket": "fooden-772c9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:708010893893:android:4aba961077c177ef76392c",
+        "android_client_info": {
+          "package_name": "com.amad.fooden"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "708010893893-1uut8nh9kj2ofpvlk8k5pmp5hi5hq5vp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMD9VWgVJZwMF7A1Vi_zlDM76QfJcyfpk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "708010893893-1uut8nh9kj2ofpvlk8k5pmp5hi5hq5vp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
