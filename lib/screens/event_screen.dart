@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fooden/models/events.dart';
 import 'package:fooden/screens/add_event_screen.dart';
+import 'dart:math' as math;
 
 class EventScreen extends StatefulWidget {
   @override
@@ -58,18 +59,41 @@ class _EventScreenState extends State<EventScreen> {
         itemCount: events.length,
         itemBuilder: (BuildContext context, int index) {
           final Event event = events[index];
-          return GestureDetector(
-            onLongPress: (){
-              setState(() {
-                events.remove(event);
-              });
+          return Dismissible(
+            onDismissed: (direction) {
+              if (direction == DismissDirection.endToStart) {
+                setState(() {
+                  events.removeAt(index);
+                });
+              }
             },
+            direction: DismissDirection.endToStart,
+            background: Container(
+              padding: EdgeInsets.all(20.0),
+              alignment: Alignment.centerRight,
+              color: Colors.red,
+              child: Transform.rotate(
+                angle: 45 * math.pi / 180,
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(width: 2.0, color: Colors.white),
+                  ),
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            key: UniqueKey(),
             child: Container(
-              margin: EdgeInsets.all(
-                  5.0), //only(top: 5.0, bottom: 5.0, right: 20.0, left: 5.0),
+              margin: EdgeInsets.all(5.0),
               padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
               decoration: BoxDecoration(
-                color: event.isHandled ? Colors.white : Color(0xFFFFEFEE),//Color(0xFFebffe8)
+                color: event.isHandled
+                    ? Color(0xFFebffe8)
+                    : Color(0xFFFFEFEE), //Color(0xFFebffe8)
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30.0),
                   bottomRight: Radius.circular(30.0),
@@ -92,9 +116,10 @@ class _EventScreenState extends State<EventScreen> {
                       Text(
                         "Task # " + (index + 1).toString(),
                         style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold),
+                          fontSize: 20.0,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       SizedBox(height: 5.0),
                       Container(

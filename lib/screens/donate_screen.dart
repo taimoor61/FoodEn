@@ -49,8 +49,8 @@ class DonateScreen extends StatelessWidget {
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(
                               builder: (context) => OrgDetailScreen(
-                                path: orgs[index].path,
-                                name: orgs[index].name,
+                                path: org.path,
+                                name: org.name,
                               )));
                         },
                         child: Card(
