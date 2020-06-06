@@ -97,6 +97,14 @@ class _EventScreenState extends State<EventScreen> {
                             fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 5.0),
+                      Text(
+                        event.location,
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.7,
                         child: Text(
