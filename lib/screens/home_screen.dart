@@ -16,13 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   FirebaseUser loggedInUser;
   PageController _controller;
 
-  final List<Widget> _children = [
-    ProfileScreen(),
-    //MyMap(),
-    Container(color: Colors.red),
-    DonateScreen(),
-    EventScreen(),
-  ];
+  List<Widget> _children;
   PageView pageView;
 
   @override
@@ -40,6 +34,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void initialize() {
     _currentIndex = 0;
+    _children = [
+      ProfileScreen(),
+      //MyMap(),
+      Container(color: Colors.red),
+      DonateScreen(),
+      EventScreen(),
+    ];
     _controller = PageController(initialPage: _currentIndex);
     pageView = PageView(
       controller: this._controller,
@@ -58,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (loggedInUser != null) {
         print(loggedInUser.email);
       }
-    } catch (e) {}
+    } catch (e) {print("ABC");}
   }
 
   @override
