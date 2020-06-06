@@ -45,3 +45,10 @@ const kEventTextFieldStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+const kEventBoxDecoration = BoxDecoration(
+  color: Colors.red, //Color(0xFFebffe8)
+  borderRadius: BorderRadius.only(
+    topLeft: Radius.circular(30.0),
+    bottomRight: Radius.circular(30.0),
+  ),
+);

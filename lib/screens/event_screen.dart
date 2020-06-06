@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fooden/constants.dart';
 import 'package:fooden/models/events.dart';
 import 'package:fooden/screens/add_event_screen.dart';
+import 'dart:math' as math;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EventScreen extends StatefulWidget {
   @override
@@ -8,27 +12,27 @@ class EventScreen extends StatefulWidget {
 }
 
 class _EventScreenState extends State<EventScreen> {
-  List<Event> events = [
-    Event(
-        amount: 5,
-        volunteerRequired: 2,
-        description: "Left over burgers and pizza",
-        isHandled: true),
-    Event(
-        amount: 10,
-        volunteerRequired: 2,
-        description: "Left over food from a marriage hall"),
-    Event(
-        amount: 15,
-        volunteerRequired: 3,
-        description: "Prepared food to be distributed among the needy",
-        isHandled: true),
-    Event(
-        amount: 2,
-        volunteerRequired: 1,
-        description: "Some leftover food",
-        isHandled: true),
-  ];
+  final _firestore = Firestore.instance;
+  final _auth = FirebaseAuth.instance;
+
+  FirebaseUser loggedInUser;
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
+
+  void getCurrentUser() async {
+    try {
+      loggedInUser = await _auth.currentUser();
+      if (loggedInUser != null) {
+        print(loggedInUser.email);
+        setState(() {});
+      }
+    } catch (e) {
+      print("ABC");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,40 +44,101 @@ class _EventScreenState extends State<EventScreen> {
           child: Icon(Icons.add),
           onPressed: () {
             showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                builder: (context) => SingleChildScrollView(
-                        child: Container(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: AddEventScreen((event) {
-                        setState(() {
-                          events.add(event);
-                        });
-                      }),
-                    )));
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => SingleChildScrollView(
+                  child: Container(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: AddEventScreen((Event event) {
+                  _firestore.collection('events').add({
+                    'amount': event.amount,
+                    'description': event.description,
+                    'email': loggedInUser.email,
+                    'handled': false,
+                    'volunteers': event.volunteerRequired,
+                  });
+                }),
+              )),
+            );
           }),
-      body: ListView.builder(
-        shrinkWrap: true,
-        itemCount: events.length,
-        itemBuilder: (BuildContext context, int index) {
-          final Event event = events[index];
-          return GestureDetector(
-            onLongPress: (){
-              setState(() {
-                events.remove(event);
-              });
+      body: loggedInUser == null
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : StreamBuilder<QuerySnapshot>(
+              stream: _firestore
+                  .collection('events')
+                  .where("email", isEqualTo: loggedInUser.email)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return Center(child: Text("Such Empty"));
+                }
+                final documents = snapshot.data.documents.reversed;
+                List<Event> events = [];
+                for (var document in documents) {
+                  events.add(
+                    Event(
+                      amount: document.data['amount'],
+                      volunteerRequired: document.data['volunteers'],
+                      description: document.data['description'],
+                      isHandled: document.data['handled'],
+                    ),
+                  );
+                }
+                return getListViewBuilder(events);
+              },
+            ),
+    );
+  }
+}
+
+ListView getListViewBuilder(List<Event> events) {
+  return ListView.builder(
+    shrinkWrap: true,
+    itemCount: events.length,
+    itemBuilder: (BuildContext context, int index) {
+      final Event event = events[index];
+      return Padding(
+        padding: EdgeInsets.all(5.0),
+        child: Container(
+          decoration: kEventBoxDecoration,
+          child: Dismissible(
+            onDismissed: (direction) {
+              // if (direction == DismissDirection.endToStart) {
+              //   setState(() {
+              //     events.removeAt(index);
+              //   });
+              // }
             },
-            child: Container(
-              margin: EdgeInsets.all(
-                  5.0), //only(top: 5.0, bottom: 5.0, right: 20.0, left: 5.0),
+            direction: DismissDirection.endToStart,
+            background: Container(
+              alignment: Alignment.centerRight,
               padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-              decoration: BoxDecoration(
-                color: event.isHandled ? Colors.white : Color(0xFFFFEFEE),//Color(0xFFebffe8)
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  bottomRight: Radius.circular(30.0),
+              decoration: kEventBoxDecoration,
+              child: Transform.rotate(
+                angle: 45 * math.pi / 180,
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(width: 2.0, color: Colors.white),
+                  ),
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
                 ),
+              ),
+            ),
+            key: UniqueKey(),
+            child: Container(
+              //margin: EdgeInsets.all(5.0),
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              decoration: kEventBoxDecoration.copyWith(
+                color: event.isHandled
+                    ? Color(0xFFebffe8)
+                    : Color(0xFFFFEFEE), //Color(0xFFebffe8)
                 boxShadow: [
                   BoxShadow(
                     color: Colors.grey,
@@ -92,9 +157,10 @@ class _EventScreenState extends State<EventScreen> {
                       Text(
                         "Task # " + (index + 1).toString(),
                         style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.bold),
+                          fontSize: 20.0,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       SizedBox(height: 5.0),
                       Text(
@@ -150,9 +216,9 @@ class _EventScreenState extends State<EventScreen> {
                 ],
               ),
             ),
-          );
-        },
-      ),
-    );
-  }
+          ),
+        ),
+      );
+    },
+  );
 }

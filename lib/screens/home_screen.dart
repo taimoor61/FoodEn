@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fooden/screens/donate_screen.dart';
 import 'package:fooden/screens/event_screen.dart';
 import 'package:fooden/screens/profile_screen.dart';
-import 'package:fooden/screens/volunteer_screen.dart';
+//import 'package:fooden/screens/volunteer_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -10,23 +11,68 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
-  List<Widget> _children = [
-    ProfileScreen(),
-    MyMap(),
-    DonateScreen(),
-    EventScreen(),
-  ];
+  int _currentIndex;
+  final _auth = FirebaseAuth.instance;
+  FirebaseUser loggedInUser;
+  PageController _controller;
+
+  List<Widget> _children;
+  PageView pageView;
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+    initialize();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void initialize() {
+    _currentIndex = 0;
+    _children = [
+      ProfileScreen(),
+      //MyMap(),
+      Container(color: Colors.red),
+      DonateScreen(),
+      EventScreen(),
+    ];
+    _controller = PageController(initialPage: _currentIndex);
+    pageView = PageView(
+      controller: this._controller,
+      children: this._children,
+      onPageChanged: (page) {
+        setState(() {
+          _currentIndex = page;
+        });
+      },
+    );
+  }
+
+  void getCurrentUser() async {
+    try {
+      loggedInUser = await _auth.currentUser();
+      if (loggedInUser != null) {
+        print(loggedInUser.email);
+      }
+    } catch (e) {print("ABC");}
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _children[_currentIndex],
+      body: pageView,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
+            this._controller.animateToPage(index,
+                duration: Duration(milliseconds: 500), curve: Curves.ease);
           });
         },
         items: [
