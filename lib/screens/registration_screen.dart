@@ -5,6 +5,7 @@ import 'package:fooden/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fooden/screens/alert_dialog_with_message.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'DetailForm.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -89,7 +90,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     final newUser = await _auth.createUserWithEmailAndPassword(
                         email: this.email, password: this.password);
                     if (newUser != null) {
-                      Navigator.pushNamed(context, 'home_screen');
+                      Navigator.push(context,
+                          MaterialPageRoute(
+                              builder: (context) => DetailForm(
+                                email: this.email,
+                                password: this.password,
+                                comingFrom: 'registration',
+                              )
+                          ));
                     }
                     setState(() {
                       showSpinner = false;

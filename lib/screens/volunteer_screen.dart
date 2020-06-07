@@ -35,6 +35,7 @@ class MyMapSampleState extends State<MyMap> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: GoogleMap(
         mapType: MapType.terrain,
         initialCameraPosition: CameraPosition(
@@ -49,7 +50,7 @@ class MyMapSampleState extends State<MyMap> {
       floatingActionButton: FloatingActionButton(
         onPressed: updateGoogleMap,
         tooltip: 'Get Location',
-        child: Icon(Icons.flag),
+        child: Icon(Icons.my_location),
       ),
     );
   }

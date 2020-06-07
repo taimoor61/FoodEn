@@ -52,3 +52,4 @@ const kEventBoxDecoration = BoxDecoration(
     bottomRight: Radius.circular(30.0),
   ),
 );
+
