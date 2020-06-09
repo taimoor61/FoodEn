@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fooden/constants.dart';
 import 'package:fooden/models/event_data.dart';
@@ -19,6 +20,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
   int volunteers = 1;
   String description = "";
   String manualLocation = "";
+
+  TextEditingController popUpTextEditor = TextEditingController();
 
 
   List<DropdownMenuItem> getWeightDropDownItems() {
@@ -148,15 +151,35 @@ class _AddEventScreenState extends State<AddEventScreen> {
               SizedBox(
                 height: 10.0,
               ),
-              FlatButton(
-                child: Text(
-                  'Get Location',
-                  style: TextStyle(color: Colors.white, fontSize: 20.0),
-                ),
-                color: Colors.red,
-                onPressed: () {
-                  getUserLocation();
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  FlatButton(
+                    child: Text(
+                      'Get Location',
+                      style: TextStyle(color: Colors.white, fontSize: 20.0),
+                    ),
+                    color: Colors.red,
+                    onPressed: () {
+                      getUserLocation();
+                    },
+                  ),
+                  Text(
+                    'OR',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                    ),
+                  ),
+                  FlatButton(
+                    child: Text(
+                      'Add manually',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    color: Colors.green,
+                    onPressed: () => _displayDialog(context),
+                  ),
+                ],
               ),
               SizedBox(
                 height: 10.0,
@@ -213,6 +236,37 @@ class _AddEventScreenState extends State<AddEventScreen> {
       manualLocation = '${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}';
     });
     return first;
+  }
+
+  _displayDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('TextField in Dialog'),
+            content: TextField(
+              controller: popUpTextEditor,
+              decoration: InputDecoration(hintText: "Enter location"),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text('CANCEL'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              new FlatButton(
+                  child: new Text('Save'),
+                onPressed: (){
+                    setState(() {
+                      manualLocation = popUpTextEditor.text;
+                    });
+                    Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 }
 //

@@ -57,6 +57,7 @@ class _EventScreenState extends State<EventScreen> {
                     'email': loggedInUser.email,
                     'handled': false,
                     'volunteers': event.volunteerRequired,
+                    'location': event.location,
                   });
                 }),
               )),
@@ -84,6 +85,7 @@ class _EventScreenState extends State<EventScreen> {
                       volunteerRequired: document.data['volunteers'],
                       description: document.data['description'],
                       isHandled: document.data['handled'],
+                      location: document.data['location'],
                     ),
                   );
                 }
@@ -167,7 +169,7 @@ ListView getListViewBuilder(List<Event> events) {
                         event.location,
                         style: TextStyle(
                           fontSize: 15.0,
-                          color: Colors.red,
+                          color: event.isHandled ? Colors.green :Colors.red,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
