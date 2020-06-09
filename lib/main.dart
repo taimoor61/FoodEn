@@ -5,6 +5,7 @@ import 'package:fooden/screens/launch_screen.dart';
 import 'package:fooden/screens/login_screen.dart';
 import 'package:fooden/screens/payment_screen.dart';
 import 'package:fooden/screens/registration_screen.dart';
+import 'package:fooden/screens/volunteer_screen.dart';
 import 'package:fooden/screens/welcome_screen.dart';
 
 void main() => runApp(MyApp());
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         'home_screen': (context) => HomeScreen(),
         'payment_screen': (context) => PaymentScreen(),
         'detail_form_screen': (context) => DetailForm(),
+        'volunteer_screen': (context) => MyMap(),
       },
      // home: LaunchScreen(),
     );
