@@ -1,7 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fooden/constants.dart';
 import 'package:fooden/models/event_data.dart';
 import 'package:fooden/models/events.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:location/location.dart';
+
 
 class AddEventScreen extends StatefulWidget {
   AddEventScreen(this.callback);
@@ -15,6 +19,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
   int currentWeight = weightList[0];
   int volunteers = 1;
   String description = "";
+  String manualLocation = "";
+
+  TextEditingController popUpTextEditor = TextEditingController();
+
 
   List<DropdownMenuItem> getWeightDropDownItems() {
     List<DropdownMenuItem<int>> dropList = [];
@@ -128,6 +136,54 @@ class _AddEventScreenState extends State<AddEventScreen> {
               SizedBox(
                 height: 10.0,
               ),
+              Text(
+                "Location",
+                style: kEventTextFieldStyle,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Text(
+                manualLocation,
+                style: kEventTextFieldStyle.copyWith(color: Colors.black),
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  FlatButton(
+                    child: Text(
+                      'Get Location',
+                      style: TextStyle(color: Colors.white, fontSize: 20.0),
+                    ),
+                    color: Colors.red,
+                    onPressed: () {
+                      getUserLocation();
+                    },
+                  ),
+                  Text(
+                    'OR',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                    ),
+                  ),
+                  FlatButton(
+                    child: Text(
+                      'Add manually',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    color: Colors.green,
+                    onPressed: () => _displayDialog(context),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
               FlatButton(
                 child: Text(
                   "Add",
@@ -140,6 +196,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     volunteerRequired: volunteers,
                     isHandled: false,
                     description: description,
+                    location: manualLocation,
                   );
                   widget.callback(event);
                   Navigator.pop(context);
@@ -150,4 +207,67 @@ class _AddEventScreenState extends State<AddEventScreen> {
           ),
         ));
   }
+
+  getUserLocation() async {//call this async method from where ever you need
+
+    LocationData myLocation;
+    String error;
+    Location location = new Location();
+    try {
+      myLocation = await location.getLocation();
+    }catch (e) {
+      if (e.code == 'PERMISSION_DENIED') {
+        error = 'please grant permission';
+        print(error);
+      }
+      if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
+        error = 'permission denied- please enable it from app settings';
+        print(error);
+      }
+      myLocation = null;
+    }
+    final coordinates = new Coordinates(
+        myLocation.latitude, myLocation.longitude);
+    var addresses = await Geocoder.local.findAddressesFromCoordinates(
+        coordinates);
+    var first = addresses.first;
+    print('  ${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}');
+    setState(() {
+      manualLocation = '${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}';
+    });
+    return first;
+  }
+
+  _displayDialog(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('TextField in Dialog'),
+            content: TextField(
+              controller: popUpTextEditor,
+              decoration: InputDecoration(hintText: "Enter location"),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text('CANCEL'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              new FlatButton(
+                  child: new Text('Save'),
+                onPressed: (){
+                    setState(() {
+                      manualLocation = popUpTextEditor.text;
+                    });
+                    Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
 }
+//
+//,, ${first.subAdminArea}, ${first.addressLine}, ,, ${first.subThoroughfare}
