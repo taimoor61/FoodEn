@@ -1,133 +1,135 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
-import 'dart:async';
-import 'package:geocoder/geocoder.dart';
+import 'package:fooden/constants.dart';
+import 'package:fooden/models/events.dart';
 
-
-const LatLng DEST = LatLng(30.195560, 71.475280);
-
-class MyMap extends StatefulWidget {
-
-  MyMap({this.location = ""});
-
-  final String location;
-
+class VolunteerScreen extends StatefulWidget {
   @override
-  State<MyMap> createState() => MyMapSampleState();
+  _VolunteerScreenState createState() => _VolunteerScreenState();
 }
 
-class MyMapSampleState extends State<MyMap> {
+class _VolunteerScreenState extends State<VolunteerScreen> {
 
-  final Map<String, Marker> _markers = {};
-  Completer _controller = Completer();
-  BitmapDescriptor pinLocationIcon;
-
-  LatLng _initPosition = LatLng(40.688841, -74.044015);
-
-  void setCustomMapPin() async {
-    pinLocationIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration(devicePixelRatio: 2.5),
-        'assets/destination_map_marker.png');
-  }
-
-
-  @override
-  void initState() {
-    super.initState();
-    setCustomMapPin();
-    updateGoogleMap();
-  }
+  final _firestore = Firestore.instance;
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: GoogleMap(
-        mapType: MapType.terrain,
-        initialCameraPosition: CameraPosition(
-          target: _initPosition,
-          zoom: 11,
-        ),
-        onMapCreated: (GoogleMapController controller){
-          _controller.complete(controller);
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(child: Text("Volunteer")),
+        automaticallyImplyLeading: false,
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            color: Colors.grey.shade400,
+            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+            width: double.infinity,
+            child: Text("Events",style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),),
+          ),
+          StreamBuilder<QuerySnapshot>(
+                  stream: _firestore
+                      .collection('events')
+                      .where("handled", isEqualTo: false)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return Center(child: Text("Such Empty"));
+                    }
+                    final documents = snapshot.data.documents.reversed;
+                    List<Event> events = [];
+                    for (var document in documents) {
+                      events.add(
+                        Event(
+                          amount: document.data['amount'],
+                          volunteerRequired: document.data['volunteers'],
+                          description: document.data['description'],
+                          isHandled: document.data['handled'],
+                          location: document.data['location'],
+                          id: document.documentID,
+                        ),
+                      );
+                    }
+                    return getListViewBuilder(events);
+                  },
+                ),
+        ],
+      )
+    );
+  }
+}
+
+ListView getListViewBuilder(List<Event> events) {
+  return ListView.builder(
+    shrinkWrap: true,
+    itemCount: events.length,
+    itemBuilder: (BuildContext context, int index) {
+      final Event event = events[index];
+      return GestureDetector(
+        onTap: () {
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => MyMap(
+          //       location: event.location,
+          //     ),
+          //   ),
+          // );
         },
-        markers: _markers.values.toSet(),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: updateGoogleMap,
-        tooltip: 'Get Location',
-        child: Icon(Icons.my_location),
-      ),
-    );
-  }
-
-
-  void updateGoogleMap()  async{
-
-    var currentLocation = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
-
-    if (widget.location.isEmpty){
-      return;
-    }
-    else{
-      reverseGeocoding();
-    }
-    setState(() {
-      _initPosition = LatLng(currentLocation.latitude, currentLocation.longitude);
-    });
-
-
-    GoogleMapController cont = await _controller.future;
-    setState(() {
-      CameraPosition newtPosition = CameraPosition(
-        target: LatLng(currentLocation.latitude, currentLocation.longitude),
-        zoom: 14,
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 15.0),
+          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+          decoration: kEventBoxDecoration.copyWith(
+            color: Colors.grey.shade100,//Color(0xFFebffe8)
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey,
+                offset: Offset(0.0, 2.0), //(x,y)
+                blurRadius: 6.0,
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    "Task # " + (index + 1).toString(),
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 5.0),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.7,
+                    child: Text(
+                      event.description,
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.blueGrey,
+                          fontWeight: FontWeight.w600),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                event.amount.toString() + 'kg',
+                style: TextStyle(
+                  fontSize: 15.0,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            ],
+          ),
+        ),
       );
-      _markers.clear();
-      final marker1 = Marker(
-        markerId: MarkerId("curr_loc"),
-        position: LatLng(currentLocation.latitude, currentLocation.longitude),
-        infoWindow: InfoWindow(title: 'Your Location'),
-      );
-      _markers["Current Location"] = marker1;
-
-//      final marker2 = Marker(
-//        markerId: MarkerId("dest_loc"),
-//        position: DEST,
-//        infoWindow: InfoWindow(title: 'DESTINATION'),
-//        icon: pinLocationIcon,
-//      );
-//
-//      _markers["Destination Location"] = marker2;
-      cont.animateCamera(CameraUpdate.newCameraPosition(newtPosition));
-    });
-
-  }
-
-  void reverseGeocoding() async {
-    print(widget.location);
-    var address = await Geocoder.local.findAddressesFromQuery(widget.location);
-    var first = address.first;
-    var coord = first.coordinates;
-    print ("${first.coordinates}");
-
-    LatLng dest = LatLng(coord.latitude, coord.longitude);
-    print(dest);
-
-    final marker2 = Marker(
-      markerId: MarkerId("dest_loc"),
-      position: dest,
-      infoWindow: InfoWindow(title: 'DESTINATION'),
-      icon: pinLocationIcon,
-    );
-    setState(() {
-      _markers["Destination Location"] = marker2;
-    });
-
-
-  }
-
-
+    },
+  );
 }

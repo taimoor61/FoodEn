@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fooden/components/rounded_button.dart';
 import 'package:fooden/constants.dart';
-import 'package:fooden/screens/DetailForm.dart';
 import 'package:fooden/screens/alert_dialog_with_message.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 

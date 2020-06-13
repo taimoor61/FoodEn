@@ -5,7 +5,8 @@ import 'package:fooden/models/events.dart';
 import 'package:fooden/screens/add_event_screen.dart';
 import 'dart:math' as math;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fooden/screens/volunteer_screen.dart';
+import 'package:fooden/screens/event_detail.dart';
+// import 'package:fooden/screens/volunteer_screen.dart';
 
 class EventScreen extends StatefulWidget {
   @override
@@ -39,7 +40,8 @@ class _EventScreenState extends State<EventScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Events"),
+        title: Center(child: Text("Events")),
+        automaticallyImplyLeading: false,
       ),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
@@ -66,7 +68,9 @@ class _EventScreenState extends State<EventScreen> {
           }),
       body: loggedInUser == null
           ? Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.blueGrey,
+              ),
             )
           : StreamBuilder<QuerySnapshot>(
               stream: _firestore
@@ -87,6 +91,7 @@ class _EventScreenState extends State<EventScreen> {
                       description: document.data['description'],
                       isHandled: document.data['handled'],
                       location: document.data['location'],
+                      id: document.documentID,
                     ),
                   );
                 }
@@ -104,20 +109,26 @@ ListView getListViewBuilder(List<Event> events) {
     itemBuilder: (BuildContext context, int index) {
       final Event event = events[index];
       return Padding(
-        padding: EdgeInsets.all(5.0),
+        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 15.0),
         child: GestureDetector(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MyMap(location: event.location,)));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => EventDetail(event: event)),
+            );
           },
           child: Container(
             decoration: kEventBoxDecoration,
             child: Dismissible(
               onDismissed: (direction) {
-                // if (direction == DismissDirection.endToStart) {
-                //   setState(() {
-                //     events.removeAt(index);
-                //   });
-                // }
+                Firestore.instance
+                    .collection('events')
+                    .document(event.id)
+                    .delete()
+                    .catchError((e) {
+                  print(e);
+                });
               },
               direction: DismissDirection.endToStart,
               background: Container(
@@ -145,7 +156,8 @@ ListView getListViewBuilder(List<Event> events) {
                 decoration: kEventBoxDecoration.copyWith(
                   color: event.isHandled
                       ? Color(0xFFebffe8)
-                      : Color(0xFFFFEFEE), //Color(0xFFebffe8)
+                      : Colors.grey
+                          .shade100, //Color(0xFFFFEFEE), //Color(0xFFebffe8)
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey,
@@ -170,14 +182,14 @@ ListView getListViewBuilder(List<Event> events) {
                           ),
                         ),
                         SizedBox(height: 5.0),
-                        Text(
-                          event.location,
-                          style: TextStyle(
-                            fontSize: 15.0,
-                            color: event.isHandled ? Colors.green :Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        // Text(
+                        //   event.location,
+                        //   style: TextStyle(
+                        //     fontSize: 15.0,
+                        //     color: event.isHandled ? Colors.green : Colors.red,
+                        //     fontWeight: FontWeight.bold,
+                        //   ),
+                        // ),
                         Container(
                           width: MediaQuery.of(context).size.width * 0.7,
                           child: Text(
@@ -201,24 +213,24 @@ ListView getListViewBuilder(List<Event> events) {
                         ),
                       ),
                       SizedBox(height: 5.0),
-                      event.isHandled
-                          ? Container(
-                              width: 40.0,
-                              height: 20.0,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                  color: Colors.green),
-                              alignment: Alignment.center,
-                              child: Text(
-                                "Done",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            )
-                          : SizedBox.shrink()
+                      Container(
+                        width: 50.0,
+                        height: 20.0,
+                        padding: EdgeInsets.all(2.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30.0),
+                          color: event.isHandled ? Colors.green : Colors.red,
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          event.isHandled ? "Done" : "Pending",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
                     ])
                   ],
                 ),
