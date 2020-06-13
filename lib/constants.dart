@@ -53,3 +53,8 @@ const kEventBoxDecoration = BoxDecoration(
   ),
 );
 
+const kEventDetailTextStyle = TextStyle(
+  fontSize: 25.0,
+  fontStyle: FontStyle.italic,
+  fontWeight: FontWeight.bold,
+);

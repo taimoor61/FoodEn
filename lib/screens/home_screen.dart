@@ -36,8 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _currentIndex = 0;
     _children = [
       ProfileScreen(),
-      MyMap(),
-      //Container(color: Colors.red),
+      VolunteerScreen(),
       DonateScreen(),
       EventScreen(),
     ];

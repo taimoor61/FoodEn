@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fooden/screens/DetailForm.dart';
 import 'package:fooden/screens/home_screen.dart';
 import 'package:fooden/screens/launch_screen.dart';
 import 'package:fooden/screens/login_screen.dart';
@@ -16,7 +15,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(canvasColor: Colors.white),
+      theme: ThemeData(
+        canvasColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          color: Colors.white,
+          textTheme: TextTheme(
+            headline6: TextStyle(
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.bold,
+              fontSize: 30.0,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      ),
       debugShowCheckedModeBanner: false,
       initialRoute: 'launch_screen',
       routes: {
@@ -26,10 +38,9 @@ class MyApp extends StatelessWidget {
         'registration_screen': (context) => RegistrationScreen(),
         'home_screen': (context) => HomeScreen(),
         'payment_screen': (context) => PaymentScreen(),
-        'detail_form_screen': (context) => DetailForm(),
-        'volunteer_screen': (context) => MyMap(),
+        'volunteer_screen': (context) => VolunteerScreen(),
       },
-     // home: LaunchScreen(),
+      // home: LaunchScreen(),
     );
   }
-} 
+}
