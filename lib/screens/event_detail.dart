@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:fooden/constants.dart';
 import 'package:fooden/models/events.dart';
 import 'package:fooden/screens/map_screen.dart';
+import 'package:fooden/screens/static_map_screen.dart';
 
 class EventDetail extends StatelessWidget {
   EventDetail({@required this.event});
 
   final Event event;
 
+  String googleMapsAPIKey = 'AIzaSyBsi_TlNeNMlTMdyOv8BJPVA4S7OkVUmj8';
+
+  Widget xyz = StaticMap(location: "abc");
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+
       appBar: AppBar(
         title: Center(
           child: Text(
@@ -107,11 +113,13 @@ class EventDetail extends StatelessWidget {
                               style: kEventDetailTextStyle,
                             ),
                           ),
-                          Text(
-                            event.description,
-                            textAlign: TextAlign.center,
-                            style: kEventDetailTextStyle.copyWith(
-                                fontWeight: FontWeight.normal),
+                          Expanded(
+                            child: Text(
+                              event.description,
+                              textAlign: TextAlign.center,
+                              style: kEventDetailTextStyle.copyWith(
+                                  fontWeight: FontWeight.normal),
+                            ),
                           ),
                         ],
                       ),
@@ -122,9 +130,9 @@ class EventDetail extends StatelessWidget {
                     child: Card(
                       elevation: 10.0,
                       child: Container(
-                        child: MyMap(
+                        child: StaticMap(
                           location: event.location,
-                        ),
+                        )
                       ),
                     ),
                   )
@@ -137,3 +145,7 @@ class EventDetail extends StatelessWidget {
     );
   }
 }
+
+//MyMap(
+//location: event.location,
+//),

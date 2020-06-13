@@ -13,7 +13,10 @@ class OrgDetailScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title : Text('Information')),
+      appBar: AppBar(
+          title : Text('Information'),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Column(
           children: <Widget>[

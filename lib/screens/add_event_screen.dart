@@ -4,6 +4,8 @@ import 'package:fooden/constants.dart';
 import 'package:fooden/models/event_data.dart';
 import 'package:fooden/models/events.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 
@@ -20,6 +22,14 @@ class _AddEventScreenState extends State<AddEventScreen> {
   int volunteers = 1;
   String description = "";
   String manualLocation = "";
+  LatLng tapMarker;
+
+  int pushCount = 0;
+  int popCount = 0;
+
+
+  GoogleMapController controller;
+  final Set<Marker> markers = {};
 
   TextEditingController popUpTextEditor = TextEditingController();
 
@@ -57,6 +67,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
     }
     return dropList;
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -238,35 +249,107 @@ class _AddEventScreenState extends State<AddEventScreen> {
     return first;
   }
 
-  _displayDialog(BuildContext context) async {
+  _displayDialog(BuildContext context) async{
+
+    var location = await Geolocator().getCurrentPosition();
+    LatLng pos = LatLng(location.latitude, location.longitude);
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             title: Text('TextField in Dialog'),
-            content: TextField(
-              controller: popUpTextEditor,
-              decoration: InputDecoration(hintText: "Enter location"),
-            ),
+            content: displayMap(pos),
+//            TextField(
+//              controller: popUpTextEditor,
+//              decoration: InputDecoration(hintText: "Enter location"),
+//            ),
             actions: <Widget>[
               new FlatButton(
                 child: new Text('CANCEL'),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                  Navigator.of(context).popUntil((route){
+                    return popCount++ == pushCount + 1;
+                  });
+                  setState(() {
+                    popCount = 0;
+                    pushCount = 0;
+                    manualLocation = "";
+                  });
                 },
               ),
               new FlatButton(
                   child: new Text('Save'),
                 onPressed: (){
                     setState(() {
-                      manualLocation = popUpTextEditor.text;
+                      geoCode(tapMarker);
                     });
-                    Navigator.of(context).pop();
+                    Navigator.of(context).popUntil((route){
+                      return popCount++ == pushCount + 1;
+                    });
+                    setState(() {
+                      popCount = 0;
+                      pushCount = 0;
+                    });
                 },
               ),
             ],
           );
         });
+  }
+
+  void addMarker(LatLng latLng){
+    setState(() {
+      markers.add(Marker(
+        markerId: MarkerId("location"),
+        position: latLng,
+        infoWindow: InfoWindow(title: "Location"),
+        icon: BitmapDescriptor.defaultMarker,
+      ));
+      tapMarker = latLng;
+      print("tapmarker: $tapMarker");
+      pushCount++;
+      _displayDialog(context);
+    });
+
+  }
+
+  Widget displayMap(LatLng pos){
+    return GoogleMap(
+      mapType: MapType.terrain,
+      initialCameraPosition: CameraPosition(
+        target: pos,
+        zoom: 14,
+      ),
+      onMapCreated: (GoogleMapController controller){
+        this.controller = controller;
+      },
+      onTap: (latLng){
+        if(markers.length >= 1){
+          setState(() {
+            markers.clear();
+            //tapMarker = latLng;
+
+          });
+
+        }
+        addMarker(latLng);
+      },
+      myLocationEnabled: true,
+      markers: this.markers,
+      tiltGesturesEnabled: false,
+    );
+  }
+
+  void geoCode(LatLng latLng) async{
+    final coordinates = new Coordinates(
+        latLng.latitude, latLng.longitude);
+    var addresses = await Geocoder.local.findAddressesFromCoordinates(
+        coordinates);
+    var first = addresses.first;
+    print('  ${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}');
+    setState(() {
+      manualLocation = '${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}';
+    });
   }
 }
 //
