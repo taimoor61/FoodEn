@@ -94,7 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: 20.0,
             ),
             Text(
-              firstName,
+              "$firstName $lastName",
               style: TextStyle(
                 color: Colors.teal.shade900,
                 fontSize: 40.0,
@@ -116,7 +116,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Expanded(
               child: Center(
                 child: RaisedButton(
-                  child: Text('SignOut'),
+                  child: Text(
+                      'SignOut',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                   color: Colors.red,
                   onPressed: _signOut,
                 ),

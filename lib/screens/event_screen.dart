@@ -215,7 +215,7 @@ ListView getListViewBuilder(List<Event> events) {
                         ),
                         SizedBox(height: 5.0),
                         Container(
-                          width: 50.0,
+                          width: 55.0,
                           height: 20.0,
                           padding: EdgeInsets.all(2.0),
                           decoration: BoxDecoration(
@@ -227,7 +227,7 @@ ListView getListViewBuilder(List<Event> events) {
                             event.isHandled ? "Done" : "Pending",
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 12.0,
+                              fontSize: 11,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

@@ -36,7 +36,7 @@ class EventDetail extends StatelessWidget {
             Stack(
               children: <Widget>[
                 Positioned(
-                  right: 0.5,
+                  left: 0.1,
                   child: Container(
                     padding: EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
@@ -52,8 +52,8 @@ class EventDetail extends StatelessWidget {
                 Image(
                   alignment: Alignment.center,
                   image: AssetImage('images/app_data.png'),
-                  height: size.height * 0.35,
-                  width: size.width * 0.9,
+                  height: size.height * 0.25,
+                  width: size.width * 1.5,
                 ),
               ],
             ),

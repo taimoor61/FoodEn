@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fooden/constants.dart';
 import 'package:fooden/models/events.dart';
@@ -25,56 +26,60 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
         automaticallyImplyLeading: false,
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            color: Colors.grey.shade400,
-            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
-            width: double.infinity,
-            child: Text("Events",style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),),
-          ),
-          StreamBuilder<QuerySnapshot>(
-                  stream: _firestore
-                      .collection('events')
-                      .where("handled", isEqualTo: false)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Center(child: Text("Such Empty"));
-                    }
-                    final documents = snapshot.data.documents.reversed;
-
-                    for (var document in documents) {
-                      events.add(
-                        Event(
-                          amount: document.data['amount'],
-                          volunteerRequired: document.data['volunteers'],
-                          description: document.data['description'],
-                          isHandled: document.data['handled'],
-                          location: document.data['location'],
-                          id: document.documentID,
-                        ),
-                      );
-                    }
-                    return getListViewBuilder(events);
-                  },
-                ),
-          SizedBox(height: 15),
-          Expanded(
-            child: FlatButton(
-              child: Text(
-                  "View on Maps",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                color: Colors.grey.shade400,
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+                width: double.infinity,
+                child: Text("Events",style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),),
               ),
-              color: Colors.red,
-              onPressed: (){
-                print(events.length);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => AllEventMap(events: events)));
-              },
+              StreamBuilder<QuerySnapshot>(
+                      stream: _firestore
+                          .collection('events')
+                          .where("handled", isEqualTo: false)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Center(child: Text("Such Empty"));
+                        }
+                        final documents = snapshot.data.documents.reversed;
+
+                        for (var document in documents) {
+                          events.add(
+                            Event(
+                              amount: document.data['amount'],
+                              volunteerRequired: document.data['volunteers'],
+                              description: document.data['description'],
+                              isHandled: document.data['handled'],
+                              location: document.data['location'],
+                              id: document.documentID,
+                            ),
+                          );
+                        }
+                        return getListViewBuilder(events);
+                      },
+                    ),
+            ],
+          ),
+          FlatButton(
+            child: Center(
+              child: Text(
+                "View on Maps",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ),
-          )
+            color: Colors.red,
+            onPressed: (){
+              print(events.length);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AllEventMap(events: events)));
+            },
+          ),
         ],
       )
     );

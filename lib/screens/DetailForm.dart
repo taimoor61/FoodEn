@@ -45,6 +45,7 @@ class _DetailFormState extends State<DetailForm>{
   final picker = ImagePicker();
 
   Future getImage() async {
+    widget.comingFrom = "";
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     setState(() {
