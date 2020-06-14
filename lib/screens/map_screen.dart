@@ -2,21 +2,25 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:fooden/models/events.dart';
+import 'package:fooden/screens/home_screen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:geocoder/geocoder.dart';
 import 'dart:math';
 import 'package:location/location.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 const LatLng DEST = LatLng(30.195560, 71.475280);
 
 class MyMap extends StatefulWidget {
 
-  MyMap({this.location = ""});
+  MyMap({this.location = "", this.id = ""});
 
   final String location;
+  final String id;
 
 
 
@@ -34,12 +38,18 @@ class MyMapSampleState extends State<MyMap> {
   Location locationTracker = Location();
   Circle circle;
   String status;
+  int pushCount = 0;
+  int popCount = 0;
 
+  final _firestore = Firestore.instance;
+  final _auth = FirebaseAuth.instance;
+  final Firestore db = Firestore.instance;
+  
   double curr_lat, curr_lon, dest_lat, dest_lon, distance;
 
   LatLng _initPosition = LatLng(40.688841, -74.044015);
 
-  
+  FirebaseUser loggedInUser;
 
   void setCustomMapPin() async {
     pinLocationIcon = await BitmapDescriptor.fromAssetImage(
@@ -48,6 +58,18 @@ class MyMapSampleState extends State<MyMap> {
 
     personLocationIcon = await BitmapDescriptor.fromAssetImage(ImageConfiguration(devicePixelRatio: 2.5),
         'assets/current_location_person.png');
+  }
+
+  void getCurrentUser() async {
+    try {
+      loggedInUser = await _auth.currentUser();
+      if (loggedInUser != null) {
+        print(loggedInUser.email);
+        setState(() {});
+      }
+    } catch (e) {
+      print("ABC");
+    }
   }
 
 
@@ -116,6 +138,9 @@ class MyMapSampleState extends State<MyMap> {
       distance = findDistance(curr_lat, curr_lon, dest_lat, dest_lon);
       if(distance <= 0.1){
         status = "Done";
+        print(status);
+        pushCount++;
+        _displayDialog(context);
       }
     });
 //    setState(() {
@@ -230,5 +255,46 @@ class MyMapSampleState extends State<MyMap> {
   }
 
 
+  void updateStatus() async{
+    
+    //var fireBaseUser = await FirebaseAuth.instance.currentUser();
+    
+    _firestore.collection("events").document(widget.id).updateData({"handled" : true}).then((result) {
+      print("status updates");
+    }).catchError((onError){
+      print(onError);
+      });
 
+   // db.collection("events").document(loggedInUser.uid).updateData({'handled' : true});
+  }
+
+  _displayDialog(BuildContext context){
+    return showDialog(
+      context: context,
+      builder: (context){
+        return AlertDialog(
+          title: Text("Order Recieved?"),
+          actions: [
+            new FlatButton(
+              child: Text('No'),
+              onPressed: (){
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: Text('Yes'),
+              onPressed: (){
+                updateStatus();
+                Navigator.of(context).popUntil((route){
+                  return popCount++ == pushCount + 3;
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
+
+  }
+  
 }

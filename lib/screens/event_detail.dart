@@ -129,6 +129,7 @@ class EventDetail extends StatelessWidget {
                   ),
                   SizedBox(height: 15.0),
                   Expanded(
+                    flex: 4,
                     child: Card(
                       elevation: 10.0,
                       child: Container(
@@ -139,27 +140,27 @@ class EventDetail extends StatelessWidget {
                       ),
                     ),
                   ),
-//                  SizedBox(height: 15),
-//                  Expanded(
-//                    flex: 1,
-//                    child: FlatButton(
-//                      child: Text(
-//                        'Show on Maps',
-//                        style:TextStyle(
-//                          color: Colors.white,
-//                        ),
-//                      ),
-//                      color: Colors.red,
-//                      onPressed: (){
-//                        Navigator.push(context,
-//                            MaterialPageRoute(
-//                                builder: (context) => MyMap(
-//                          location: event.location,
-//                        )));
-//                        MyMap(location: event.location);
-//                      },
-//                    ),
-//                  ),
+                  SizedBox(height: 15),
+                  Expanded(
+                    flex: 1,
+                    child: FlatButton(
+                      child: Text(
+                        'Show on Maps',
+                        style:TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      color: Colors.red,
+                      onPressed: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(
+                                builder: (context) => MyMap(
+                          location: event.location,
+                        )));
+                        MyMap(location: event.location);
+                      },
+                    ),
+                  ),
                 ],
               ),
             )
