@@ -1,7 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fooden/constants.dart';
 import 'package:fooden/models/events.dart';
+import 'package:fooden/screens/all_events_map_screen.dart';
+import 'package:fooden/screens/map_screen.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geocoder/geocoder.dart';
 
 class VolunteerScreen extends StatefulWidget {
   @override
@@ -11,6 +16,7 @@ class VolunteerScreen extends StatefulWidget {
 class _VolunteerScreenState extends State<VolunteerScreen> {
 
   final _firestore = Firestore.instance;
+  List<Event> events = [];
 
   @override
   Widget build(BuildContext context) {
@@ -20,40 +26,60 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
         automaticallyImplyLeading: false,
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            color: Colors.grey.shade400,
-            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
-            width: double.infinity,
-            child: Text("Events",style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),),
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                color: Colors.grey.shade400,
+                padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
+                width: double.infinity,
+                child: Text("Events",style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),),
+              ),
+              StreamBuilder<QuerySnapshot>(
+                      stream: _firestore
+                          .collection('events')
+                          .where("handled", isEqualTo: false)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Center(child: Text("Such Empty"));
+                        }
+                        final documents = snapshot.data.documents.reversed;
+
+                        for (var document in documents) {
+                          events.add(
+                            Event(
+                              amount: document.data['amount'],
+                              volunteerRequired: document.data['volunteers'],
+                              description: document.data['description'],
+                              isHandled: document.data['handled'],
+                              location: document.data['location'],
+                              id: document.documentID,
+                            ),
+                          );
+                        }
+                        return getListViewBuilder(events);
+                      },
+                    ),
+            ],
           ),
-          StreamBuilder<QuerySnapshot>(
-                  stream: _firestore
-                      .collection('events')
-                      .where("handled", isEqualTo: false)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return Center(child: Text("Such Empty"));
-                    }
-                    final documents = snapshot.data.documents.reversed;
-                    List<Event> events = [];
-                    for (var document in documents) {
-                      events.add(
-                        Event(
-                          amount: document.data['amount'],
-                          volunteerRequired: document.data['volunteers'],
-                          description: document.data['description'],
-                          isHandled: document.data['handled'],
-                          location: document.data['location'],
-                          id: document.documentID,
-                        ),
-                      );
-                    }
-                    return getListViewBuilder(events);
-                  },
+          FlatButton(
+            child: Center(
+              child: Text(
+                "View on Maps",
+                style: TextStyle(
+                  color: Colors.white,
                 ),
+              ),
+            ),
+            color: Colors.red,
+            onPressed: (){
+              print(events.length);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AllEventMap(events: events)));
+            },
+          ),
         ],
       )
     );
@@ -132,4 +158,38 @@ ListView getListViewBuilder(List<Event> events) {
       );
     },
   );
+}
+
+Future<Widget> viewAllEvents(List<Event> events) async{
+
+  List<Marker> markers = [];
+  for (int i = 0; i<events.length; i++){
+    markers.add(Marker(
+      markerId: MarkerId(events[i].location),
+      position: await reverseGeocoding(events[i].location),
+      draggable: false,
+      zIndex: 2,
+      infoWindow: InfoWindow(title: events[i].location),
+    ));
+  }
+  return GoogleMap(
+      mapType: MapType.terrain,
+      initialCameraPosition: CameraPosition(
+        target: await reverseGeocoding(events[0].location),
+        zoom: 11,
+      ),
+      markers: markers.getRange(0, markers.length),
+  );
+}
+
+Future<LatLng> reverseGeocoding(String location) async {
+  var address = await Geocoder.local.findAddressesFromQuery(location);
+  var first = address.first;
+  var coord = first.coordinates;
+  print ("${first.coordinates}");
+
+  LatLng dest = LatLng(coord.latitude, coord.longitude);
+  print(dest);
+
+  return dest;
 }

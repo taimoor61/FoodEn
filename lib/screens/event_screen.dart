@@ -203,35 +203,37 @@ ListView getListViewBuilder(List<Event> events) {
                         ),
                       ],
                     ),
-                    Column(children: <Widget>[
-                      Text(
-                        event.amount.toString() + 'kg',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 5.0),
-                      Container(
-                        width: 50.0,
-                        height: 20.0,
-                        padding: EdgeInsets.all(2.0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30.0),
-                          color: event.isHandled ? Colors.green : Colors.red,
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          event.isHandled ? "Done" : "Pending",
+                    Expanded(
+                      child: Column(children: <Widget>[
+                        Text(
+                          event.amount.toString() + 'kg',
                           style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12.0,
+                            fontSize: 15.0,
+                            color: Colors.grey,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                      )
-                    ])
+                        SizedBox(height: 5.0),
+                        Container(
+                          width: 55.0,
+                          height: 20.0,
+                          padding: EdgeInsets.all(2.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30.0),
+                            color: event.isHandled ? Colors.green : Colors.red,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            event.isHandled ? "Done" : "Pending",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )
+                      ]),
+                    )
                   ],
                 ),
               ),

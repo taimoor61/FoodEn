@@ -63,39 +63,43 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: pageView,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-            this._controller.animateToPage(index,
-                duration: Duration(milliseconds: 500), curve: Curves.ease);
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            backgroundColor: Colors.black,
-            icon: Icon(Icons.person),
-            title: Text('Profile'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.black,
-            icon: new Icon(Icons.map),
-            title: new Text('Volunteer'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.black,
-            icon: new Icon(Icons.money_off),
-            title: new Text('Donate'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.black,
-            icon: new Icon(Icons.event),
-            title: new Text('Events'),
-          )
-        ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: pageView,
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          elevation: 30,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+              this._controller.animateToPage(index,
+                  duration: Duration(milliseconds: 300), curve: Curves.fastLinearToSlowEaseIn);
+            });
+          },
+          items: [
+            BottomNavigationBarItem(
+              backgroundColor: Colors.white,
+              icon: Icon(Icons.person,color: Colors.black,),
+              title: Text('Profile',style: TextStyle(color: Colors.black),),
+            ),
+            BottomNavigationBarItem(
+              backgroundColor: Colors.white,
+              icon: new Icon(Icons.map, color: Colors.black,),
+              title: new Text('Volunteer', style: TextStyle(color: Colors.black),),
+            ),
+            BottomNavigationBarItem(
+              backgroundColor: Colors.white,
+              icon: new Icon(Icons.money_off, color: Colors.black,),
+              title: new Text('Donate', style: TextStyle(color: Colors.black),),
+            ),
+            BottomNavigationBarItem(
+              backgroundColor: Colors.white,
+              icon: new Icon(Icons.event, color: Colors.black,),
+              title: new Text('Events', style: TextStyle(color: Colors.black),),
+            )
+          ],
+        ),
       ),
     );
   }

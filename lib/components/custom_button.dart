@@ -8,7 +8,8 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.white,
+      color: Colors.grey.shade200,
+      elevation: 10,
       margin: EdgeInsets.symmetric(
         vertical: 10.0,
         horizontal: 20.0,
