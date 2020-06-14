@@ -11,7 +11,7 @@ import 'package:path/path.dart';
 // ignore: must_be_immutable
 class DetailForm extends StatefulWidget{
   //const DetailForm({Key key}) : super(key: key);
-  DetailForm({@required this.email, @required this.password, @required this.comingFrom, this.firstName="", this.lastName = "", this.phoneNumber = "", this.fileName = ""});
+  DetailForm({@required this.email, @required this.password, @required this.comingFrom, this.firstName="", this.lastName = "", this.phoneNumber = "", this.fileName = "", this.downloadURL = ""});
 
   final String email;
   final String password;
@@ -72,12 +72,20 @@ class _DetailFormState extends State<DetailForm>{
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final phoneNumberController = TextEditingController();
 
   @override
   void initState(){
     super.initState();
     emailController.text = widget.email;
     passwordController.text = widget.password;
+    if(widget.comingFrom == "profile"){
+      firstNameController.text = widget.firstName;
+      lastNameController.text = widget.lastName;
+      phoneNumberController.text = widget.phoneNumber;
+    }
   }
 
   @override
@@ -123,6 +131,7 @@ class _DetailFormState extends State<DetailForm>{
                             ),
                             labelText: 'First Name',
                           ),
+                          controller: firstNameController,
                           validator: (String value){
                             if (value.trim().isEmpty){
                               return 'First Name is required';
@@ -154,6 +163,7 @@ class _DetailFormState extends State<DetailForm>{
                             ),
                             labelText: 'Last Name',
                           ),
+                          controller: lastNameController,
                           validator: (value){
                             if (value.trim().isEmpty){
                               return 'Last Name is required';
@@ -246,6 +256,8 @@ class _DetailFormState extends State<DetailForm>{
                       ),
                       labelText: 'Phone Number',
                     ),
+                    controller: phoneNumberController,
+                    keyboardType: TextInputType.phone,
                     validator: (value){
                       if (value.trim().isEmpty){
                         return 'Phone Number is required';
@@ -260,7 +272,8 @@ class _DetailFormState extends State<DetailForm>{
                   ),
                   SizedBox(height: 16),
                   Center(
-                    child: _image == null
+                    child: widget.comingFrom == "profile" ? Image.network(widget.downloadURL) :
+                    _image == null
                         ? Text('No Image Selected')
                         : Image.file(_image, fit: BoxFit.fill, width: 200, height: 200) ,
                   ),

@@ -19,7 +19,7 @@ class StaticMap extends StatefulWidget {
   final Map<String, Marker> _markers = {};
   GoogleMapController _controller;
   BitmapDescriptor pinLocationIcon;
-  LatLng destination;
+  LatLng destination = LatLng(40.688841, -74.044015);
 
   void setCustomMapPin() async {
     pinLocationIcon = await BitmapDescriptor.fromAssetImage(
@@ -48,6 +48,10 @@ class StaticMap extends StatefulWidget {
         onMapCreated: (GoogleMapController controller){
           _controller = controller;
         },
+        rotateGesturesEnabled: false,
+        scrollGesturesEnabled: false,
+        zoomGesturesEnabled: false,
+        tiltGesturesEnabled: false,
         markers: _markers.values.toSet(),
       ),
     );
@@ -60,18 +64,26 @@ class StaticMap extends StatefulWidget {
     var coord = first.coordinates;
     print ("${first.coordinates}");
 
-    destination = LatLng(coord.latitude, coord.longitude);
+    setState(() {
+      destination = LatLng(coord.latitude, coord.longitude);
+    });
+
     print(destination);
 
     final marker2 = Marker(
       markerId: MarkerId("dest_loc"),
       position: destination,
-      infoWindow: InfoWindow(title: 'DESTINATION'),
+      infoWindow: InfoWindow(title: widget.location),
       icon: pinLocationIcon,
     );
     setState(() {
       _markers["Destination Location"] = marker2;
     });
+
+    _controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+      target: destination,
+      zoom: 14,
+    )));
 
   }
 }

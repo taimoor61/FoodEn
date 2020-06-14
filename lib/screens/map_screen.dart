@@ -1,13 +1,14 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:fooden/models/events.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:geocoder/geocoder.dart';
 import 'dart:math';
 import 'package:location/location.dart';
-import 'package:vector_math/vector_math_operations.dart';
+
 
 const LatLng DEST = LatLng(30.195560, 71.475280);
 
@@ -32,6 +33,9 @@ class MyMapSampleState extends State<MyMap> {
   StreamSubscription locationSubscription;
   Location locationTracker = Location();
   Circle circle;
+  String status;
+
+  double curr_lat, curr_lon, dest_lat, dest_lon, distance;
 
   LatLng _initPosition = LatLng(40.688841, -74.044015);
 
@@ -57,6 +61,7 @@ class MyMapSampleState extends State<MyMap> {
 
   @override
   Widget build(BuildContext context) {
+    //print(widget.events[0].location);
     return new Scaffold(
       //floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: GoogleMap(
@@ -104,6 +109,13 @@ class MyMapSampleState extends State<MyMap> {
             tilt: 0,
             zoom: 18.0)));
         updateMarkerAndCircle(newLocalData);
+      }
+      curr_lat = newLocalData.latitude;
+      curr_lon = newLocalData.longitude;
+
+      distance = findDistance(curr_lat, curr_lon, dest_lat, dest_lon);
+      if(distance <= 0.1){
+        status = "Done";
       }
     });
 //    setState(() {
@@ -153,10 +165,13 @@ class MyMapSampleState extends State<MyMap> {
     LatLng dest = LatLng(coord.latitude, coord.longitude);
     print(dest);
 
+    dest_lat = dest.latitude;
+    dest_lon = dest.longitude;
+
     final marker2 = Marker(
       markerId: MarkerId("dest_loc"),
       position: dest,
-      infoWindow: InfoWindow(title: 'DESTINATION'),
+      infoWindow: InfoWindow(title: widget.location),
       icon: pinLocationIcon,
     );
     setState(() {
@@ -192,6 +207,28 @@ class MyMapSampleState extends State<MyMap> {
       fillColor: Colors.blue.withAlpha(70)
     );
   }
+
+
+  double findDistance(double clat, double clon, double dlat, double dlon){
+    clat = clat * (pi/180);
+    clon = clon * (pi/180);
+    dlat = dlat * (pi/180);
+    dlon = dlon * (pi/180);
+
+    double lon_distance = dlon - clon;
+    double lat_distance = dlat - clat;
+
+    double a = pow(sin(lat_distance/2), 2) +
+               cos(clat) * cos(dlat) *
+               pow(sin(lon_distance/2), 2);
+
+    double c = 2 * asin(sqrt(a));
+
+    double r = 6371;
+
+    return c * r;
+  }
+
 
 
 }

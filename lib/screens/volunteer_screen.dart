@@ -2,6 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fooden/constants.dart';
 import 'package:fooden/models/events.dart';
+import 'package:fooden/screens/all_events_map_screen.dart';
+import 'package:fooden/screens/map_screen.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geocoder/geocoder.dart';
 
 class VolunteerScreen extends StatefulWidget {
   @override
@@ -11,6 +15,7 @@ class VolunteerScreen extends StatefulWidget {
 class _VolunteerScreenState extends State<VolunteerScreen> {
 
   final _firestore = Firestore.instance;
+  List<Event> events = [];
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +43,7 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
                       return Center(child: Text("Such Empty"));
                     }
                     final documents = snapshot.data.documents.reversed;
-                    List<Event> events = [];
+
                     for (var document in documents) {
                       events.add(
                         Event(
@@ -54,6 +59,22 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
                     return getListViewBuilder(events);
                   },
                 ),
+          SizedBox(height: 15),
+          Expanded(
+            child: FlatButton(
+              child: Text(
+                  "View on Maps",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+              ),
+              color: Colors.red,
+              onPressed: (){
+                print(events.length);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => AllEventMap(events: events)));
+              },
+            ),
+          )
         ],
       )
     );
@@ -132,4 +153,38 @@ ListView getListViewBuilder(List<Event> events) {
       );
     },
   );
+}
+
+Future<Widget> viewAllEvents(List<Event> events) async{
+
+  List<Marker> markers = [];
+  for (int i = 0; i<events.length; i++){
+    markers.add(Marker(
+      markerId: MarkerId(events[i].location),
+      position: await reverseGeocoding(events[i].location),
+      draggable: false,
+      zIndex: 2,
+      infoWindow: InfoWindow(title: events[i].location),
+    ));
+  }
+  return GoogleMap(
+      mapType: MapType.terrain,
+      initialCameraPosition: CameraPosition(
+        target: await reverseGeocoding(events[0].location),
+        zoom: 11,
+      ),
+      markers: markers.getRange(0, markers.length),
+  );
+}
+
+Future<LatLng> reverseGeocoding(String location) async {
+  var address = await Geocoder.local.findAddressesFromQuery(location);
+  var first = address.first;
+  var coord = first.coordinates;
+  print ("${first.coordinates}");
+
+  LatLng dest = LatLng(coord.latitude, coord.longitude);
+  print(dest);
+
+  return dest;
 }

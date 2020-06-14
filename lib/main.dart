@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fooden/screens/home_screen.dart';
 import 'package:fooden/screens/launch_screen.dart';
 import 'package:fooden/screens/login_screen.dart';
+import 'package:fooden/screens/map_screen.dart';
 import 'package:fooden/screens/payment_screen.dart';
 import 'package:fooden/screens/registration_screen.dart';
 import 'package:fooden/screens/volunteer_screen.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         'home_screen': (context) => HomeScreen(),
         'payment_screen': (context) => PaymentScreen(),
         'volunteer_screen': (context) => VolunteerScreen(),
+        'map_screen': (context) => MyMap(),
       },
       // home: LaunchScreen(),
     );

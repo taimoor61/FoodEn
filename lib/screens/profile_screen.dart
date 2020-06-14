@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fooden/components/custom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fooden/screens/DetailForm.dart';
 
 // ignore: must_be_immutable
 class ProfileScreen extends StatefulWidget {
@@ -51,7 +52,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         automaticallyImplyLeading: false,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: null,
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => DetailForm(comingFrom: "profile", firstName: this.firstName, lastName: this.lastName, email: this.email, password: this.password, phoneNumber: this.phoneNumber, downloadURL: this.downloadURL,)));
+        },
         child: Icon(Icons.edit),
       ),
       body: getProfileData(),

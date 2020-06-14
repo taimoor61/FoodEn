@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fooden/constants.dart';
 import 'package:fooden/models/events.dart';
@@ -12,6 +13,7 @@ class EventDetail extends StatelessWidget {
   String googleMapsAPIKey = 'AIzaSyBsi_TlNeNMlTMdyOv8BJPVA4S7OkVUmj8';
 
   Widget xyz = StaticMap(location: "abc");
+
 
   @override
   Widget build(BuildContext context) {
@@ -130,12 +132,34 @@ class EventDetail extends StatelessWidget {
                     child: Card(
                       elevation: 10.0,
                       child: Container(
-                        child: StaticMap(
+                        child:
+                        StaticMap(
                           location: event.location,
-                        )
+                        ),
                       ),
                     ),
-                  )
+                  ),
+//                  SizedBox(height: 15),
+//                  Expanded(
+//                    flex: 1,
+//                    child: FlatButton(
+//                      child: Text(
+//                        'Show on Maps',
+//                        style:TextStyle(
+//                          color: Colors.white,
+//                        ),
+//                      ),
+//                      color: Colors.red,
+//                      onPressed: (){
+//                        Navigator.push(context,
+//                            MaterialPageRoute(
+//                                builder: (context) => MyMap(
+//                          location: event.location,
+//                        )));
+//                        MyMap(location: event.location);
+//                      },
+//                    ),
+//                  ),
                 ],
               ),
             )
