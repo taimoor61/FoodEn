@@ -124,7 +124,7 @@ class MyMapSampleState extends State<MyMap> {
             bearing: 192.833490,
             target: LatLng(newLocalData.latitude, newLocalData.longitude),
             tilt: 0,
-            zoom: 18.0)));
+            zoom: 11.0)));
         updateMarkerAndCircle(newLocalData);
       }
       currLat = newLocalData.latitude;
