@@ -20,6 +20,7 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    events.clear();
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text("Volunteer")),
@@ -57,6 +58,8 @@ class _VolunteerScreenState extends State<VolunteerScreen> {
                               isHandled: document.data['handled'],
                               location: document.data['location'],
                               id: document.documentID,
+                              latitude: document.data['latitude'],
+                              longitude: document.data['longitude'],
                             ),
                           );
                         }

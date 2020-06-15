@@ -24,6 +24,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
   String manualLocation = "";
   LatLng tapMarker;
 
+  String destLatitude;
+  String destLongitude;
+
   int pushCount = 0;
   int popCount = 0;
 
@@ -208,6 +211,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     isHandled: false,
                     description: description,
                     location: manualLocation,
+                    latitude: destLatitude,
+                    longitude: destLongitude,
                   );
                   widget.callback(event);
                   Navigator.pop(context);
@@ -245,6 +250,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
     print('  ${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}');
     setState(() {
       manualLocation = '${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}';
+      destLatitude = "${myLocation.latitude}";
+      destLongitude = "${myLocation.longitude}";
     });
     return first;
   }
@@ -349,6 +356,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
     print('  ${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}');
     setState(() {
       manualLocation = '${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}';
+      destLatitude = "${latLng.latitude}";
+      destLongitude = "${latLng.longitude}";
     });
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:fooden/screens/home_screen.dart';
 import 'package:fooden/screens/launch_screen.dart';
 import 'package:fooden/screens/login_screen.dart';
@@ -15,18 +14,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return NeumorphicApp(
+    return MaterialApp(
       title: 'Flutter Demo',
-      themeMode: ThemeMode.light,
-      theme: NeumorphicThemeData(
-        baseColor: Color(0xFFFFFFFF),
-        lightSource: LightSource.topLeft,
-        depth: 10,
-      ),
-      darkTheme: NeumorphicThemeData(
-        baseColor: Color(0xFF3E3E3E),
-        lightSource: LightSource.topLeft,
-        depth: 6,
+      theme: ThemeData(
+        canvasColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          color: Colors.white,
+          textTheme: TextTheme(
+            headline6: TextStyle(
+              fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.bold,
+              fontSize: 30.0,
+              color: Colors.black,
+            ),
+          ),
+        ),
       ),
       debugShowCheckedModeBanner: false,
       initialRoute: 'launch_screen',
