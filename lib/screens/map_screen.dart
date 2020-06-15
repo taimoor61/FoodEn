@@ -1,10 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:fooden/models/events.dart';
-import 'package:fooden/screens/home_screen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:geocoder/geocoder.dart';
 import 'dart:math';
@@ -45,7 +40,7 @@ class MyMapSampleState extends State<MyMap> {
   final _auth = FirebaseAuth.instance;
   final Firestore db = Firestore.instance;
   
-  double curr_lat, curr_lon, dest_lat, dest_lon, distance;
+  double currLat, currLon, destLat, destLon, distance;
 
   LatLng _initPosition = LatLng(40.688841, -74.044015);
 
@@ -132,10 +127,10 @@ class MyMapSampleState extends State<MyMap> {
             zoom: 18.0)));
         updateMarkerAndCircle(newLocalData);
       }
-      curr_lat = newLocalData.latitude;
-      curr_lon = newLocalData.longitude;
+      currLat = newLocalData.latitude;
+      currLon = newLocalData.longitude;
 
-      distance = findDistance(curr_lat, curr_lon, dest_lat, dest_lon);
+      distance = findDistance(currLat, currLon, destLat, destLon);
       if(distance <= 0.1){
         status = "Done";
         print(status);
@@ -190,8 +185,8 @@ class MyMapSampleState extends State<MyMap> {
     LatLng dest = LatLng(coord.latitude, coord.longitude);
     print(dest);
 
-    dest_lat = dest.latitude;
-    dest_lon = dest.longitude;
+    destLat = dest.latitude;
+    destLon = dest.longitude;
 
     final marker2 = Marker(
       markerId: MarkerId("dest_loc"),
@@ -240,12 +235,12 @@ class MyMapSampleState extends State<MyMap> {
     dlat = dlat * (pi/180);
     dlon = dlon * (pi/180);
 
-    double lon_distance = dlon - clon;
-    double lat_distance = dlat - clat;
+    double lonDistance = dlon - clon;
+    double latDistance = dlat - clat;
 
-    double a = pow(sin(lat_distance/2), 2) +
+    double a = pow(sin(latDistance/2), 2) +
                cos(clat) * cos(dlat) *
-               pow(sin(lon_distance/2), 2);
+               pow(sin(lonDistance/2), 2);
 
     double c = 2 * asin(sqrt(a));
 

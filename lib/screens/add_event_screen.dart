@@ -7,7 +7,7 @@ import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-
+import 'alert_dialog_with_message.dart';
 
 class AddEventScreen extends StatefulWidget {
   AddEventScreen(this.callback);
@@ -27,12 +27,10 @@ class _AddEventScreenState extends State<AddEventScreen> {
   int pushCount = 0;
   int popCount = 0;
 
-
   GoogleMapController controller;
   final Set<Marker> markers = {};
 
   TextEditingController popUpTextEditor = TextEditingController();
-
 
   List<DropdownMenuItem> getWeightDropDownItems() {
     List<DropdownMenuItem<int>> dropList = [];
@@ -67,7 +65,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
     }
     return dropList;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -201,32 +198,46 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   style: TextStyle(color: Colors.white, fontSize: 20.0),
                 ),
                 color: Colors.lightBlueAccent,
-                onPressed: () {
-                  Event event = Event(
-                    amount: currentWeight,
-                    volunteerRequired: volunteers,
-                    isHandled: false,
-                    description: description,
-                    location: manualLocation,
-                  );
-                  widget.callback(event);
-                  Navigator.pop(context);
+                onPressed: () async {
+                  if (manualLocation == "") {
+                    await showDialog(
+                      context: context,
+                      builder: (context) => AlertDialogWithMessage(
+                        title: "Location Error",
+                        message: 'Message: No Location Added',
+                      ),
+                    );
+                  } else {
+                    Event event = Event(
+                      amount: currentWeight,
+                      volunteerRequired: volunteers,
+                      isHandled: false,
+                      description: description,
+                      location: manualLocation,
+                    );
+
+                    widget.callback(event);
+                    Navigator.pop(context);
+                  }
                 },
               ),
-              SizedBox(height: 20.0,)
+              SizedBox(
+                height: 20.0,
+              )
             ],
           ),
         ));
   }
 
-  getUserLocation() async {//call this async method from where ever you need
+  getUserLocation() async {
+    //call this async method from where ever you need
 
     LocationData myLocation;
     String error;
     Location location = new Location();
     try {
       myLocation = await location.getLocation();
-    }catch (e) {
+    } catch (e) {
       if (e.code == 'PERMISSION_DENIED') {
         error = 'please grant permission';
         print(error);
@@ -237,20 +248,21 @@ class _AddEventScreenState extends State<AddEventScreen> {
       }
       myLocation = null;
     }
-    final coordinates = new Coordinates(
-        myLocation.latitude, myLocation.longitude);
-    var addresses = await Geocoder.local.findAddressesFromCoordinates(
-        coordinates);
+    final coordinates =
+        new Coordinates(myLocation.latitude, myLocation.longitude);
+    var addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
-    print('  ${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}');
+    print(
+        '  ${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}');
     setState(() {
-      manualLocation = '${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}';
+      manualLocation =
+          '${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}';
     });
     return first;
   }
 
-  _displayDialog(BuildContext context) async{
-
+  _displayDialog(BuildContext context) async {
     var location = await Geolocator().getCurrentPosition();
     LatLng pos = LatLng(location.latitude, location.longitude);
     return showDialog(
@@ -267,7 +279,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
               new FlatButton(
                 child: new Text('CANCEL'),
                 onPressed: () {
-                  Navigator.of(context).popUntil((route){
+                  Navigator.of(context).popUntil((route) {
                     return popCount++ == pushCount + 1;
                   });
                   setState(() {
@@ -278,18 +290,18 @@ class _AddEventScreenState extends State<AddEventScreen> {
                 },
               ),
               new FlatButton(
-                  child: new Text('Save'),
-                onPressed: (){
-                    setState(() {
-                      geoCode(tapMarker);
-                    });
-                    Navigator.of(context).popUntil((route){
-                      return popCount++ == pushCount + 1;
-                    });
-                    setState(() {
-                      popCount = 0;
-                      pushCount = 0;
-                    });
+                child: new Text('Save'),
+                onPressed: () {
+                  setState(() {
+                    geoCode(tapMarker);
+                  });
+                  Navigator.of(context).popUntil((route) {
+                    return popCount++ == pushCount + 1;
+                  });
+                  setState(() {
+                    popCount = 0;
+                    pushCount = 0;
+                  });
                 },
               ),
             ],
@@ -297,7 +309,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
         });
   }
 
-  void addMarker(LatLng latLng){
+  void addMarker(LatLng latLng) {
     setState(() {
       markers.add(Marker(
         markerId: MarkerId("location"),
@@ -310,27 +322,24 @@ class _AddEventScreenState extends State<AddEventScreen> {
       pushCount++;
       _displayDialog(context);
     });
-
   }
 
-  Widget displayMap(LatLng pos){
+  Widget displayMap(LatLng pos) {
     return GoogleMap(
       mapType: MapType.terrain,
       initialCameraPosition: CameraPosition(
         target: pos,
         zoom: 14,
       ),
-      onMapCreated: (GoogleMapController controller){
+      onMapCreated: (GoogleMapController controller) {
         this.controller = controller;
       },
-      onTap: (latLng){
-        if(markers.length >= 1){
+      onTap: (latLng) {
+        if (markers.length >= 1) {
           setState(() {
             markers.clear();
             //tapMarker = latLng;
-
           });
-
         }
         addMarker(latLng);
       },
@@ -340,15 +349,16 @@ class _AddEventScreenState extends State<AddEventScreen> {
     );
   }
 
-  void geoCode(LatLng latLng) async{
-    final coordinates = new Coordinates(
-        latLng.latitude, latLng.longitude);
-    var addresses = await Geocoder.local.findAddressesFromCoordinates(
-        coordinates);
+  void geoCode(LatLng latLng) async {
+    final coordinates = new Coordinates(latLng.latitude, latLng.longitude);
+    var addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
-    print('  ${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}');
+    print(
+        '  ${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}');
     setState(() {
-      manualLocation = '${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}';
+      manualLocation =
+          '${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}';
     });
   }
 }
