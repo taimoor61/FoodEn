@@ -10,10 +10,7 @@ class EventDetail extends StatelessWidget {
 
   final Event event;
 
-  String googleMapsAPIKey = 'AIzaSyBsi_TlNeNMlTMdyOv8BJPVA4S7OkVUmj8';
-
-  Widget xyz = StaticMap(location: "abc");
-
+  final String googleMapsAPIKey = 'AIzaSyBsi_TlNeNMlTMdyOv8BJPVA4S7OkVUmj8';
 
   @override
   Widget build(BuildContext context) {

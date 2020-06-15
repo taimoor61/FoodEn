@@ -47,7 +47,9 @@ class _DetailFormState extends State<DetailForm>{
   Future getImage() async {
     widget.comingFrom = "";
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
+    if (pickedFile == null){
+      return;
+    }
     setState(() {
       _image = File(pickedFile.path);
     });

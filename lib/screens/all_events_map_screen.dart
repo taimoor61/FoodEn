@@ -40,7 +40,6 @@ class _AllEventMap extends State<AllEventMap>{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
   return new Scaffold(
     body: GoogleMap(
       mapType: MapType.terrain,
