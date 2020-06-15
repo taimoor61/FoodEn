@@ -61,6 +61,8 @@ class _EventScreenState extends State<EventScreen> {
                     'handled': false,
                     'volunteers': event.volunteerRequired,
                     'location': event.location,
+                    'latitude': event.latitude,
+                    'longitude': event.longitude,
                   });
                 }),
               )),
@@ -92,6 +94,8 @@ class _EventScreenState extends State<EventScreen> {
                       isHandled: document.data['handled'],
                       location: document.data['location'],
                       id: document.documentID,
+                      latitude: document.data['latitude'],
+                      longitude: document.data['longitude'],
                     ),
                   );
                 }
