@@ -162,6 +162,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         this.downloadURL = value.data['url'];
       });
     });
+
+
   }
 
   Future<void> _signOut() async {

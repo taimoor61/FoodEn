@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fooden/models/events.dart';
+import 'package:fooden/screens/map_screen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
@@ -61,7 +62,7 @@ class _AllEventMap extends State<AllEventMap>{
     _markers.clear();
 
     for(int i = 0; i<widget.events.length; i++){
-      reverseGeoCodeAll(widget.events[i].location);
+      reverseGeoCodeAll(widget.events[i].location, widget.events[i].id);
     }
     var currentLocation = await locationTracker.getLocation();
 
@@ -88,12 +89,13 @@ class _AllEventMap extends State<AllEventMap>{
     _controller.animateCamera(CameraUpdate.newCameraPosition(newPosition));
   }
 
-  void reverseGeoCodeAll(String location) async{
+  void reverseGeoCodeAll(String location, String id) async{
     var address = await Geocoder.local.findAddressesFromQuery(location);
     var first = address.first;
     var coord = first.coordinates;
     //print ("${first.coordinates}");
 
+    String abc = '${first.thoroughfare}, ${first.featureName}, ${first.locality}, ${first.adminArea}';
     LatLng dest = LatLng(coord.latitude, coord.longitude);
     print(dest);
 
@@ -102,9 +104,38 @@ class _AllEventMap extends State<AllEventMap>{
       position: dest,
       infoWindow: InfoWindow(title: location),
       icon: pinLocationIcon,
+      onTap: (){
+          _displayDialog(context, abc, id);
+      }
     );
     setState(() {
       _markers[location] = marker;
     });
+  }
+
+  _displayDialog(BuildContext context, String location, String id){
+    return showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            title: Text("Start order?"),
+            actions: [
+              new FlatButton(
+                child: Text('No'),
+                onPressed: (){
+                  Navigator.of(context).pop();
+                },
+              ),
+              new FlatButton(
+                child: Text('Yes'),
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyMap(location: location, id: id,)));
+                },
+              ),
+            ],
+          );
+        },
+    );
+
   }
 }
