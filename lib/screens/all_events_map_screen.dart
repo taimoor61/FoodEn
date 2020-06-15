@@ -203,6 +203,9 @@ class _AllEventMap extends State<AllEventMap>{
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
+                                              onPressed: (){
+                                                _displayDialog(context, widget.events[i].location, widget.events[i].id);
+                                              },
                                             ),
                                             color: Colors.red,
                                           ),

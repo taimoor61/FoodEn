@@ -50,10 +50,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         title: Center(child: Text("Profile")),
         automaticallyImplyLeading: false,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.exit_to_app,
+              color: Colors.black,
+              size: 25,
+            ),
+            onPressed: _signOut,
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => DetailForm(comingFrom: "profile", firstName: this.firstName, lastName: this.lastName, email: this.email, password: this.password, phoneNumber: this.phoneNumber, downloadURL: this.downloadURL,)));
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => DetailForm(
+                    comingFrom: "profile",
+                    firstName: this.firstName,
+                    lastName: this.lastName,
+                    email: this.email,
+                    password: this.password,
+                    phoneNumber: this.phoneNumber,
+                    downloadURL: this.downloadURL,
+                  )));
         },
         child: Icon(Icons.edit),
       ),
@@ -70,7 +91,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: <Widget>[
             Flexible(
               child: ClipOval(
-                child: downloadURL.isEmpty ? Image.asset("images/placeholder.png") :FadeInImage.assetNetwork(
+                child: downloadURL.isEmpty
+                    ? Image.asset("images/placeholder.png")
+                    : FadeInImage.assetNetwork(
                   placeholder: "images/placeholder.png",
                   image: downloadURL,
                   fit: BoxFit.fill,
@@ -78,17 +101,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   width: 200,
                 ),
               ),
-              // Container(
-              //   width: 200.0,
-              //   height: 200.0,
-              //   decoration: new BoxDecoration(
-              //     shape: BoxShape.circle,
-              //     image: new DecorationImage(
-              //       fit: BoxFit.fill,
-              //       image: downloadURL.isEmpty ? AssetImage("images/placeholder.png") : NetworkImage(downloadURL),
-              //     ),
-              //   ),
-              // ),
             ),
             SizedBox(
               height: 20.0,
@@ -113,20 +125,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: Icons.email,
             ),
             SizedBox(height: 20),
-            Expanded(
-              child: Center(
-                child: RaisedButton(
-                  child: Text(
-                      'SignOut',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  color: Colors.red,
-                  onPressed: _signOut,
-                ),
-              ),
-            )
           ],
         ),
       ),
@@ -162,8 +160,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         this.downloadURL = value.data['url'];
       });
     });
-
-
   }
 
   Future<void> _signOut() async {
