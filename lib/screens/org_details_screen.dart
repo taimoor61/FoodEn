@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:fooden/models/organizations.dart';
 
 import '../components/rounded_button.dart';
 
 // ignore: must_be_immutable
 class OrgDetailScreen extends StatelessWidget{
 
-  OrgDetailScreen({this.path = '', this.name = ''});
+  OrgDetailScreen({this.org});
 
-  String path;
-  String name;
-
+  Organization org;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +21,7 @@ class OrgDetailScreen extends StatelessWidget{
           children: <Widget>[
             Expanded(
               child: Card(
-                child: Image.asset(path,fit: BoxFit.contain),
+                child: Image.asset(org.path,fit: BoxFit.contain),
                 elevation: 5,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -31,7 +30,7 @@ class OrgDetailScreen extends StatelessWidget{
               ),
             ),
             Text(
-              name,
+              org.name,
               style: TextStyle(
                 fontSize: 40,
                 fontWeight: FontWeight.normal,
@@ -41,7 +40,7 @@ class OrgDetailScreen extends StatelessWidget{
               height: 10,
             ),
             Text(
-              'Location',
+              org.location,
               style: TextStyle(
                 fontSize: 25,
               ),
@@ -50,7 +49,7 @@ class OrgDetailScreen extends StatelessWidget{
               height: 10,
             ),
             Text(
-              'Phone Number',
+              org.phoneNumber,
               style: TextStyle(
                 fontSize: 25,
               ),

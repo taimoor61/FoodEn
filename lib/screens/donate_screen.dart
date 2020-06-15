@@ -9,16 +9,16 @@ class DonateScreen extends StatelessWidget {
 
   List<Organization> orgs = [
     Organization(
-        path: 'images/aghakhan-foundation.png', name: 'Agha Khan Foundation'
+        path: 'images/aghakhan-foundation.png', name: 'Agha Khan Foundation', location:"International", phoneNumber: "(051) 111 253 254"
     ),
     Organization(
-        path: 'images/al-ameen.jpg', name: 'Al-Ameen Trust'
+        path: 'images/al-ameen.jpg', name: 'Al-Ameen Trust', location: "Near Civic Center Karachi", phoneNumber: "0800-26336"
     ),
     Organization(
-        path: 'images/eidhi-foundation.jpg', name: 'Eidhi Foundation'
+        path: 'images/eidhi-foundation.jpg', name: 'Eidhi Foundation', location: "Lahore, Pakistan", phoneNumber: "(042) 35156363"
     ),
     Organization(
-        path: 'images/mustafa-trust.png', name: 'Al-Mustafa Trust'
+        path: 'images/mustafa-trust.png', name: 'Al-Mustafa Trust', location: "Scheme 3, Rawalpindi", phoneNumber: "(051) 5598743"
     ),
 
   ];
@@ -49,8 +49,7 @@ class DonateScreen extends StatelessWidget {
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(
                               builder: (context) => OrgDetailScreen(
-                                path: org.path,
-                                name: org.name,
+                                org: org,
                               )));
                         },
                         child: Card(
