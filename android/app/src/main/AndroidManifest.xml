@@ -16,7 +16,7 @@
         android:label="fooden"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCfLFQykOIGHYnCpvKFdvaK1DgnahC00GY"/>
+            android:value="AIzaSyDMD9VWgVJZwMF7A1Vi_zlDM76QfJcyfpk"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
